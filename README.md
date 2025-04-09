@@ -1,41 +1,66 @@
 # Fuzzy Logic Membership Function Graph
 
-![Fuzzy Logic Membership Function Graph](./assets/icon/icon.png)
+<div align="center">
+  <img src="./assets/icon/icon.png" alt="Fuzzy Logic Membership Function Graph" width="150" height="150"/>
+  
+  [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+  ![Platform](https://img.shields.io/badge/platform-Web-brightgreen)
+  ![Status](https://img.shields.io/badge/status-Active-success)
+  [![ORCID](https://img.shields.io/badge/ORCID-0009--0008--4716--7429-green.svg)](https://orcid.org/0009-0008-4716-7429)
+</div>
 
 ## Description
 
 This web application allows you to create, visualize, and export fuzzy logic membership functions for use in fuzzy logic systems, machine learning, and decision-making applications. The tool provides an intuitive interface to generate triangular, left-shoulder, and right-shoulder membership functions with customizable parameters.
 
-## Features
+## ✨ Features
 
-- **Create Various Membership Functions**:
-  - Triangle membership functions
-  - Left-shoulder membership functions
-  - Right-shoulder membership functions
-- **Interactive Graph Visualization**:
+<details open>
+<summary><b>🔷 Create Various Membership Functions</b></summary>
+<br>
+  
+- Triangle membership functions
+- Left-shoulder membership functions
+- Right-shoulder membership functions
+</details>
 
-  - Real-time function rendering
-  - Customizable graph labels and titles
-  - Adjustable X and Y axis ranges via mouse wheel (hold Ctrl for X-axis)
-  - Function list with color customization
+<details open>
+<summary><b>📊 Interactive Graph Visualization</b></summary>
+<br>
+  
+- Real-time function rendering
+- Customizable graph labels and titles
+- Adjustable X and Y axis ranges via mouse wheel (hold Ctrl for X-axis)
+- Function list with color customization
+</details>
 
-- **Customization Options**:
+<details open>
+<summary><b>🎨 Customization Options</b></summary>
+<br>
+  
+- Change function colors
+- Add custom background images
+- Adjust background image opacity
+- Light/dark mode toggle
+</details>
 
-  - Change function colors
-  - Add custom background images
-  - Adjust background image opacity
-  - Light/dark mode toggle
+<details open>
+<summary><b>💾 Export Capabilities</b></summary>
+<br>
+  
+- Download graph as JPEG image
+- Automatic saving of your work (browser localStorage)
+</details>
 
-- **Export Capabilities**:
-
-  - Download graph as JPEG image
-  - Automatic saving of your work (browser localStorage)
-
-- **User Interface**:
-  - Draggable toolbar for better workspace organization
-  - Collapsible function panel
-  - Toast notifications for important events
-  - Responsive layout for desktop use
+<details open>
+<summary><b>🖱️ User Interface</b></summary>
+<br>
+  
+- Draggable toolbar for better workspace organization
+- Collapsible function panel
+- Toast notifications for important events
+- Responsive layout for desktop use
+</details>
 
 ## Desktop-Only Application
 
@@ -64,6 +89,23 @@ This application is designed for desktop use only and is not optimized for mobil
 
 4. **Export Your Work**:
    - Click "Download JPEG" button to save the graph as an image
+
+## ⌨️ Keyboard Shortcuts & Actions
+
+<div align="center">
+
+|    Category    |              Action              | Description                    | Icon |
+| :------------: | :------------------------------: | :----------------------------- | :--: |
+| **Navigation** |       `Ctrl + Mouse Wheel`       | Zoom X-axis                    |  🔍  |
+|                |          `Mouse Wheel`           | Zoom Y-axis                    |  🔍  |
+|                | `Click + Drag` on toolbar header | Move the toolbar               |  🖱️  |
+|     **UI**     |    `Click` on toolbar header     | Expand/collapse the toolbar    |  📑  |
+|                |       Theme toggle button        | Switch between light/dark mode |  🌓  |
+| **Functions**  |   `Delete` button on function    | Remove the function from graph |  🗑️  |
+|                |    `Color picker` on function    | Change the function's color    |  🎨  |
+|    **Data**    |      `Download JPEG` button      | Export graph as image          |  💾  |
+
+</div>
 
 ## Installation
 
