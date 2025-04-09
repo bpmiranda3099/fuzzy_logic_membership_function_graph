@@ -117,7 +117,9 @@
       border: 1px solid rgba(0, 0, 0, 0.08);
       -webkit-backdrop-filter: blur(5px);
       backdrop-filter: blur(5px);
-      transition: all 0.3s ease;
+      transition: box-shadow 0.3s ease, opacity 0.3s ease, border 0.3s ease; /* Modified transition */
+      will-change: transform; /* Add hardware acceleration */
+      transform: translateZ(0); /* Force GPU rendering */
     }
     
     @media (max-width: 768px) {
@@ -1354,30 +1356,53 @@
       chart.update();
       
       showToast(`Color updated for "${chart.data.datasets[index].label}"`, "success");
-    }
-
-    // Make the form draggable
+    }    // Make the form draggable
     let isDragging = false;
     let offsetX, offsetY;
 
     const form = document.getElementById('function-form');
-    
+
     form.addEventListener('mousedown', (e) => {
-      isDragging = true;
-      offsetX = e.clientX - form.getBoundingClientRect().left;
-      offsetY = e.clientY - form.getBoundingClientRect().top;
+      // Only initiate drag if clicking on the header
+      if (e.target.closest('.card-header')) {
+        isDragging = true;
+        offsetX = e.clientX - form.getBoundingClientRect().left;
+        offsetY = e.clientY - form.getBoundingClientRect().top;
+        
+        // Add active class immediately for visual feedback
+        form.classList.add('active');
+        
+        // Disable transitions during drag for better performance
+        form.style.transition = 'none';
+      }
     });
 
     document.addEventListener('mousemove', (e) => {
       if (isDragging) {
-        form.style.left = e.clientX - offsetX + 'px';
-        form.style.top = e.clientY - offsetY + 'px';
+        // Use requestAnimationFrame for smoother movement
+        requestAnimationFrame(() => {
+          form.style.left = (e.clientX - offsetX) + 'px';
+          form.style.top = (e.clientY - offsetY) + 'px';
+        });
       }
     });
 
     document.addEventListener('mouseup', () => {
-      isDragging = false;
-    });    // Variables for axis scaling
+      if (isDragging) {
+        isDragging = false;
+        
+        // Restore transitions after drag
+        form.style.transition = 'box-shadow 0.3s ease, opacity 0.3s ease, border 0.3s ease';
+        
+        // Remove active class with a slight delay
+        setTimeout(() => form.classList.remove('active'), 200);
+      }
+    });
+
+    // Prevent text selection during drag
+    form.addEventListener('dragstart', (e) => {
+      e.preventDefault();
+    });// Variables for axis scaling
     let yAxisMin = 0;
     let yAxisMax = 1;
     let xAxisMin = -50;
