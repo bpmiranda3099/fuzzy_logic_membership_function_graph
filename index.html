@@ -6,6 +6,79 @@
   <title>Fuzzy Logic Membership Function Graph</title>  
   <!-- favicon: browser tab icon -->
   <link rel="icon" href="./assets/icon/icon.png" type="image/png">
+  
+  <!-- Mobile Device Restriction -->
+  <style>
+    #mobile-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #000000;
+      z-index: 9999;
+      color: white;
+      text-align: center;
+      padding: 20px;
+      font-family: 'DM Mono', monospace;
+      overflow: hidden;
+    }
+    
+    #mobile-overlay .content {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 90%;
+      max-width: 600px;
+    }
+    
+    #mobile-overlay h1 {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+    
+    #mobile-overlay p {
+      font-size: 16px;
+      margin-bottom: 15px;
+    }
+    
+    body.mobile-device {
+      overflow: hidden;
+    }
+  </style>
+  
+  <script>
+    // Device detection function
+    function isMobileDevice() {
+      const mobileRegex = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i;
+      return mobileRegex.test(navigator.userAgent) || 
+             (window.innerWidth <= 768) ||
+             ('ontouchstart' in document.documentElement && 
+              navigator.userAgent.match(/Mobi/));
+    }
+    
+    // Execute on page load
+    window.addEventListener('DOMContentLoaded', function() {
+      if (isMobileDevice()) {
+        document.body.classList.add('mobile-device');
+        document.getElementById('mobile-overlay').style.display = 'block';
+      }
+    });
+    
+    // Also check on resize
+    window.addEventListener('resize', function() {
+      if (isMobileDevice()) {
+        document.body.classList.add('mobile-device');
+        document.getElementById('mobile-overlay').style.display = 'block';
+      } else {
+        document.body.classList.remove('mobile-device');
+        document.getElementById('mobile-overlay').style.display = 'none';
+      }
+    });
+  </script>
+  
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
   <!-- Font Awesome CSS -->
@@ -909,9 +982,16 @@
   <div id="chart-container">
     <canvas id="fuzzyChart" width="800" height="400"></canvas>
   </div>
-  
-  <!-- Toast container -->
+    <!-- Toast container -->
   <div class="toast-container" id="toast-container"></div>
+  
+  <!-- Mobile Overlay -->
+  <div id="mobile-overlay">
+    <div class="content">
+      <h1>Mobile Device Detected</h1>
+      <p>Sorry, this application is not optimized for mobile devices. Please use a desktop or laptop for the best experience.</p>
+    </div>
+  </div>
   <script>
     // Function to update fields order based on selected type
     function updateFieldsOrder() {
@@ -1879,7 +1959,7 @@
           <h5><img src="./assets/icon/icon.png" alt="Connection Icon" class="footer-logo"><strong>Fuzzy Logic Membership Function Graph</strong></h5>
           <p class="footer-text">Create and visualize fuzzy logic membership functions with ease.</p>
         </div>        <div class="col-lg-2 col-md-3 mb-3 px-4">
-          <h5>Links</h5>
+          <h5>Developer Links</h5>
           <ul class="list-unstyled">
             <li>
               <a href="https://github.com" target="_blank" class="footer-link" rel="noopener">
@@ -2177,5 +2257,12 @@
       }
       document.getElementById("chart-title").style.display = "none";
   </script>
+  <!-- Mobile Overlay -->
+  <div id="mobile-overlay">
+    <div class="content">
+      <h1>Mobile Device Detected</h1>
+      <p>Sorry, this application is not optimized for mobile devices. Please use a desktop or laptop for the best experience.</p>
+    </div>
+  </div>
 </body>
 </html>
