@@ -1,0 +1,2154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fuzzy Logic Membership Function Graph</title>  
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <!-- AOS CSS -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <!-- DM Mono Font -->
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&display=swap" rel="stylesheet">  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Chart.js Annotation Plugin -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-annotation/2.2.1/chartjs-plugin-annotation.min.js"></script><style>    body {
+      font-family: 'DM Mono', monospace;
+      margin: 0;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 0px;
+      background-color: #f4f7fc;
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      line-height: 1.5;
+    }/* Form controls styling */
+    .form-control, .form-select {
+      border-radius: 8px;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+      transition: all 0.3s ease;
+      height: auto;
+    }
+    
+    .form-control:focus, .form-select:focus {
+      border-color: #0d6efd;
+      box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.2);
+    }
+    
+    .form-floating {
+      position: relative;
+      margin-bottom: 1rem;
+    }
+    
+    .form-floating > .form-control,
+    .form-floating > .form-select {
+      height: calc(3.5rem + 2px);
+      padding: 1rem 0.75rem;
+    }      .form-floating > label {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      padding: 1rem 0.75rem;
+      pointer-events: none;
+      border: 1px solid transparent;
+      transform-origin: 0 0;
+      transition: opacity .1s ease-in-out, transform .1s ease-in-out;
+      color: #6c757d;
+      font-weight: 500;
+      font-family: 'DM Mono', monospace;
+      letter-spacing: -0.01em;
+    }
+    
+    body.dark-mode .form-floating > label {
+      color: #aaaaaa;
+    }
+      /* Button styling */    .btn {
+      border-radius: 8px;
+      padding: 8px 16px;
+      font-weight: 500;
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      font-family: 'DM Mono', monospace;
+      letter-spacing: -0.01em;
+      text-transform: capitalize;
+    }
+    
+    .btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+      .btn-success {
+      background-color: #000000;
+    }
+    
+    .btn-primary {
+      background-color: #000000;
+    }
+    
+    body.dark-mode .btn-success,
+    body.dark-mode .btn-primary {
+      background-color: #ffffff;
+      color: #000000;
+    }    #function-form {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      z-index: 10;
+      background-color: rgba(255, 255, 255, 0.97);
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      cursor: move;
+      -webkit-user-select: none;
+      user-select: none;
+      width: auto;
+      min-width: 650px;
+      max-width: 800px;
+      display: block;
+      overflow: hidden;
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      -webkit-backdrop-filter: blur(5px);
+      backdrop-filter: blur(5px);
+      transition: all 0.3s ease;
+    }
+    
+    @media (max-width: 768px) {
+      #function-form {
+        min-width: auto;
+        width: 90%;
+        left: 5%;
+        right: 5%;
+      }
+    }
+    
+    @media (max-width: 576px) {
+      #function-form {
+        max-width: 95%;
+        left: 2.5%;
+        right: 2.5%;
+        top: 80px;
+      }
+      
+      #function-form .card-header h3 {
+        font-size: 16px;
+      }
+    }#function-form .card-header {
+      padding: 15px 20px;
+      font-weight: 600;
+      border-bottom: none;
+      font-size: 18px;
+      font-family: 'DM Mono', monospace;
+      letter-spacing: -0.02em;
+      background-color: #000000 !important;
+      color: #ffffff !important;
+    }
+    
+    body.dark-mode #function-form .card-header {
+      background-color: #ffffff !important;
+      color: #000000 !important;
+    }
+    
+    #function-form .card-body {
+      padding: 20px;
+    }
+
+    #function-form .close-btn {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background-color: rgba(220, 53, 69, 0.9);
+      color: white;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      border-radius: 50%;
+      font-size: 14px;
+      transition: all 0.2s ease;
+    }
+    
+    #function-form .close-btn:hover {
+      background-color: #dc3545;
+      transform: scale(1.1);
+    }    #chart-container {
+      width: 100%;
+      height: calc(100vh - 150px);
+      margin-top: 30px;
+      margin-bottom: 30px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      max-width: 1400px;
+      padding: 0 15px;
+    }
+
+    canvas {
+      width: 100% !important;
+      height: 100% !important;
+      max-height: 80vh;
+    }
+    
+    @media (max-width: 768px) {
+      #chart-container {
+        height: calc(100vh - 180px);
+        margin-top: 20px;
+        margin-bottom: 20px;
+      }
+    }
+    
+    @media (max-width: 576px) {
+      #chart-container {
+        height: calc(100vh - 200px);
+      }
+    }
+
+    #show-form-bookmark {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background-color: #007bff;
+      color: white;
+      padding: 10px;
+      border-radius: 50%;
+      cursor: pointer;
+      z-index: 10;
+      display: none;
+    }
+
+    #show-form-bookmark:hover {
+      background-color: #0056b3;
+    }    .function-list {
+      margin-top: 20px;
+      max-height: 300px;
+      overflow-y: auto;
+      padding-right: 5px;
+    }
+    
+    .function-list::-webkit-scrollbar {
+      width: 6px;
+    }
+    
+    .function-list::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 10px;
+    }
+    
+    .function-list::-webkit-scrollbar-thumb {
+      background: #c1c1c1;
+      border-radius: 10px;
+    }
+    
+    .function-list::-webkit-scrollbar-thumb:hover {
+      background: #a8a8a8;
+    }
+
+    .function-item {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      align-items: center;
+      padding: 8px 12px;
+      border-radius: 8px;
+      background-color: #f8f9fa;
+      border-left: 4px solid #0d6efd;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+      transition: all 0.2s ease;
+    }
+    
+    .function-item:hover {
+      background-color: #f0f0f0;
+      transform: translateX(2px);
+    }      .function-item span {
+      font-weight: 500;
+      color: #495057;
+      font-family: 'DM Mono', monospace;
+      letter-spacing: -0.01em;
+    }    .function-item .function-controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .function-item button {
+      background-color: #dc3545;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      cursor: pointer;
+      border-radius: 6px;
+      font-size: 12px;
+      transition: all 0.2s ease;
+    }
+    
+    .function-item button:hover {
+      background-color: #bb2d3b;
+      transform: scale(1.05);
+    }
+    
+    .function-item .color-picker {
+      width: 30px;
+      height: 30px;
+      padding: 0;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    
+    .function-item .color-picker:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+    }
+    
+    /* Toast styling */
+    .toast-container {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 1000;
+    }
+      .toast {
+      min-width: 250px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 10px;
+      opacity: 1;
+    }    .toast-header {
+      display: flex;
+      align-items: center;
+      padding: 0.5rem 0.75rem;
+      background-clip: padding-box;
+      border-bottom: 1px solid rgba(0,0,0,.05);
+      background-color: #000000;
+      color: #ffffff;
+    }
+    
+    .toast-body {
+      padding: 0.75rem;
+    }
+      .bg-success-light {
+      background-color: #ffffff;
+      border-left: 4px solid #198754;
+    }
+    
+    .bg-danger-light {
+      background-color: #ffffff;
+      border-left: 4px solid #dc3545;
+    }
+      .bg-info-light {
+      background-color: #ffffff;
+      border-left: 4px solid #0d6efd;
+    }
+    
+    /* Dark Mode Styles */
+    body.dark-mode {
+      background-color: #121212;
+      color: #ffffff;
+    }
+      body:not(.dark-mode) #chart-container {
+      background-color: #000000;
+      border-radius: 8px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    }
+    
+    body.dark-mode #chart-container {
+      background-color: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    }
+      body.dark-mode #function-form {
+      background-color: #000000;
+      border-color: #2d2d2d;
+      color: #ffffff;
+    }
+    
+    body.dark-mode .function-item {
+      background-color: #2d2d2d;
+      border-left-color: #5e9eff;
+    }
+    
+    body.dark-mode .function-item span {
+      color: #ffffff;
+    }
+    
+    body.dark-mode .form-control,
+    body.dark-mode .form-select {
+      background-color: #3a3a3a;
+      color: #ffffff;
+      border-color: #555;
+    }
+    
+    body.dark-mode .form-floating > label {
+      color: #aaaaaa;
+    }
+      body.dark-mode .toast {
+      background-color: #000000;
+      color: #ffffff;
+    }
+        /* Footer text styling for light/dark modes */
+    body:not(.dark-mode) .footer {
+      background-color: #000000 !important;
+      color: #ffffff !important;
+    }
+    
+    body:not(.dark-mode) .footer h5,
+    body:not(.dark-mode) .footer-text,
+    body:not(.dark-mode) .footer-copyright {
+      color: #ffffff !important;
+    }
+      body:not(.dark-mode) .footer-link {
+      color: #ffffff !important;
+      text-decoration: none;
+    }
+    
+    body.dark-mode .footer {
+      background-color: #ffffff !important;
+      color: #000000 !important;
+    }
+    
+    body.dark-mode .footer h5,
+    body.dark-mode .footer-text,
+    body.dark-mode .footer-copyright {
+      color: #000000 !important;
+    }
+    
+    body.dark-mode .footer-link {
+      color: #000000 !important;
+      text-decoration: none;
+    }
+    
+    /* Remove link underlines everywhere */
+    a.nav-link, .navbar a {
+      text-decoration: none !important;
+    }
+
+    /* Custom form range slider styling */
+    .form-range::-webkit-slider-thumb {
+      background: #3A3A3A;
+    }
+    .form-range::-moz-range-thumb {
+      background: #3A3A3A;
+    }
+    .form-range::-ms-thumb {
+      background: #3A3A3A;
+    }
+    
+    /* Make slider track visible in light mode */
+    .form-range::-webkit-slider-runnable-track {
+      background: #3A3A3A;
+      height: 4px;
+    }
+    .form-range::-moz-range-track {
+      background: #3A3A3A;
+      height: 4px;
+    }
+    .form-range::-ms-track {
+      background: #3A3A3A;
+      height: 4px;
+    }
+    
+    body.dark-mode .form-range::-webkit-slider-thumb {
+      background: #ffffff;
+    }
+    body.dark-mode .form-range::-moz-range-thumb {
+      background: #ffffff;
+    }
+    body.dark-mode .form-range::-ms-thumb {
+      background: #ffffff;
+    }
+    
+    body.dark-mode .toast-header {
+      background-color: #ffffff;
+      color: #000000;
+    }
+    
+    body.dark-mode .bg-success-light {
+      background-color: #000000;
+      border-left: 4px solid #198754;
+    }
+    
+    body.dark-mode .bg-danger-light {
+      background-color: #000000;
+      border-left: 4px solid #dc3545;
+    }
+    
+    body.dark-mode .bg-info-light {
+      background-color: #000000;
+      border-left: 4px solid #0d6efd;
+    }/* Navbar and footer styles for light/dark mode - Glass effect */
+    .navbar, .footer {
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+      -webkit-backdrop-filter: blur(5px);
+      backdrop-filter: blur(5px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+      /* Navbar scroll animation */
+    .navbar {
+      transform: translateY(0);
+      transition: transform 0.4s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+      position: fixed;
+    }
+    
+    .navbar.navbar-scrolled {
+      transform: translateY(0);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+      animation: slideDown 0.5s ease;
+    }
+    
+    @keyframes slideDown {
+      0% { transform: translateY(-100%); }
+      100% { transform: translateY(0); }
+    }
+    
+    /* Navbar hover effect */
+    .navbar:hover {
+      transform: translateY(-3px);
+    }
+    
+    /* Icon hover animations */
+    .navbar .nav-link {
+      transition: transform 0.2s ease;
+    }
+    
+    .navbar .nav-link:hover {
+      transform: scale(1.2);
+    }
+    
+    /* Individual icon hover effects */
+    .navbar .nav-link svg,
+    .navbar .nav-link img {
+      transition: transform 0.2s ease;
+    }
+    
+    .navbar .nav-link:hover svg,
+    .navbar .nav-link:hover img {
+      transform: translateY(-2px);
+    }
+    
+    body:not(.dark-mode) .navbar, 
+    body:not(.dark-mode) .footer {
+      background: rgb(0, 0, 0) !important; /* Glass-like Black in light mode */
+    }
+    
+    body.dark-mode .navbar,
+    body.dark-mode .footer {
+      background: rgb(255, 255, 255) !important; /* Glass-like White in dark mode */
+    }
+    
+    body.dark-mode .navbar-brand,
+    body.dark-mode .nav-link,
+    body.dark-mode #theme-toggle,
+    body.dark-mode .footer {
+      color: #000000 !important;
+    }
+    
+    body:not(.dark-mode) .navbar-brand,
+    body:not(.dark-mode) .nav-link,
+    body:not(.dark-mode) #theme-toggle,
+    body:not(.dark-mode) .footer {
+      color: #ffffff !important;
+    }    /* SVG icon transition */
+    #theme-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      height: 24px;
+      width: 24px;
+      background: transparent !important;
+      border: none;
+      padding: 0;
+      box-shadow: none;
+    }
+    
+    #theme-toggle:focus, 
+    #theme-toggle:active,
+    #theme-toggle:hover {
+      background-color: transparent !important;
+      border: none !important;
+      box-shadow: none !important;
+      outline: none !important;
+    }
+    
+    #moon-icon, #sun-icon {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      transition: opacity 0.3s ease, transform 0.5s ease;
+      background: transparent;
+    }
+    
+    #moon-icon.hidden, #sun-icon.hidden {
+      opacity: 0;
+      transform: translate(-50%, -50%) rotate(90deg) scale(0.5);
+    }
+    
+    #moon-icon.visible, #sun-icon.visible {
+      opacity: 1;
+      transform: translate(-50%, -50%) rotate(0) scale(1);
+    }    /* Dark/Light mode transition */
+    body, #chart-container, #function-form, .function-item, 
+    .form-control, .form-select, .toast, .card-header {
+      transition: all 0.3s ease;
+    }
+    
+    /* Initial load animations */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    @keyframes scaleIn {
+      from {
+        opacity: 0;
+        transform: scale(0.95);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+    
+    #chart-container {
+      animation: fadeInUp 0.8s ease-out forwards;
+    }    #function-form {
+      animation: scaleIn 0.6s ease-out forwards;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      cursor: move;
+      border: 2px dashed rgba(0, 0, 0, 0.1);
+      transition: all 0.4s ease;
+      opacity: 0.9;
+    }
+    
+    body.dark-mode #function-form {
+      border: 2px dashed rgba(255, 255, 255, 0.1);
+    }
+    
+    #function-form:hover,
+    #function-form:focus,
+    #function-form.active {
+      border: 2px dashed rgba(0, 0, 0, 0.582);
+      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.2);
+      opacity: 1;
+    }      /* Glass tooltip with directional text */    @keyframes vibrate {
+      0% { transform: translate(-50%, -50%) rotate(0deg); }
+      25% { transform: translate(-51%, -49%) rotate(0.5deg); }
+      50% { transform: translate(-50%, -51%) rotate(-0.5deg); }
+      75% { transform: translate(-49%, -50%) rotate(0.3deg); }
+      100% { transform: translate(-50%, -50%) rotate(0deg); }
+    }
+    
+    #function-form::after {
+      content: "Drag in any direction";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: rgba(0, 0, 0, 0.582);
+      -webkit-backdrop-filter: blur(10px);
+      backdrop-filter: blur(10px);
+      color: white;
+      padding: 15px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      text-align: center;
+      opacity: 1;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+      z-index: 1001;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+      width: 150px;
+      height: 150px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: vibrate 0.7s infinite ease-in-out;
+    }
+    
+    /* Hide tooltip on hover or when toolbar is folded */
+    #function-form:hover::after,
+    #function-form:has(#form-body[style*="display: none"])::after {
+      opacity: 0;
+      visibility: hidden;
+      animation: none;
+    }
+
+    #function-form .card-header:before {
+      content: "";
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 16px;
+      opacity: 0.7;
+      cursor: move;
+    }
+    
+    /* Logo styles */
+    .app-logo {
+      height: 24px;
+      margin-right: 10px;
+      vertical-align: middle;
+      filter: invert(1);
+    }
+    
+    body.dark-mode .app-logo {
+      filter: invert(0);
+    }
+    
+    .footer-logo {
+      height: 24px;
+      margin-right: 8px;
+      vertical-align: middle;
+    }
+      body.dark-mode .footer-logo {
+      filter: invert(0);
+    }
+    
+    body:not(.dark-mode) .footer-logo {
+      filter: invert(1);
+    }
+      /* ORCID icon color handling for light/dark modes */
+    body:not(.dark-mode) .orcid-icon {
+      filter: invert(1); /* Make it white in light mode */
+    }
+    
+    body.dark-mode .orcid-icon {
+      filter: invert(0); /* Keep original color in dark mode */
+    }
+    
+    /* Footer ORCID icon color handling for light/dark modes */
+    body:not(.dark-mode) .footer-orcid-icon {
+      filter: invert(1); /* Make it white in light mode */
+    }
+    
+    body.dark-mode .footer-orcid-icon {
+      filter: invert(0); /* Keep original color in dark mode */
+    }
+  </style>
+</head>
+<body><!-- Navbar -->  <div class="container-fluid mt-3">    <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top mb-4 rounded-3 shadow" style="top: 20px; width: calc(100% - 30px); max-width: 1140px; margin-left: auto; margin-right: auto; z-index: 1030;" data-aos="fade-down" data-aos-duration="800">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#"><img src="./assets/icon/icon.png" alt="Connection Icon" class="app-logo"><strong>Fuzzy Logic Membership Function Graph</strong></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button><div class="collapse navbar-collapse" id="navbarNav">          <div class="navbar-nav ms-auto d-flex align-items-center">
+            <!-- GitHub Logo -->
+            <a href="https://github.com" target="_blank" rel="noopener" class="nav-link px-2" title="GitHub">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-github" viewBox="0 0 16 16">
+                <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
+              </svg>
+            </a>
+            
+            <!-- LinkedIn Logo -->
+            <a href="https://linkedin.com/in/bpmiranda" target="_blank" class="nav-link px-2" title="LinkedIn" rel="noopener">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-linkedin" viewBox="0 0 16 16">
+                <path d="M0 1.146C0 .513.526 0 1.175 0h13.65C15.474 0 16 .513 16 1.146v13.708c0 .633-.526 1.146-1.175 1.146H1.175C.526 16 0 15.487 0 14.854V1.146zm4.943 12.248V6.169H2.542v7.225h2.401zm-1.2-8.212c.837 0 1.358-.554 1.358-1.248-.015-.709-.52-1.248-1.342-1.248-.822 0-1.359.54-1.359 1.248 0 .694.521 1.248 1.327 1.248h.016zm4.908 8.212V9.359c0-.216.016-.432.08-.586.173-.431.568-.878 1.232-.878.869 0 1.216.662 1.216 1.634v3.865h2.401V9.25c0-2.22-1.184-3.252-2.764-3.252-1.274 0-1.845.7-2.165 1.193v.025h-.016a5.54 5.54 0 0 1 .016-.025V6.169h-2.4c.03.678 0 7.225 0 7.225h2.4z"/>
+              </svg>
+            </a>
+            
+            <!-- Email -->
+            <a href="mailto:brandon.miranda@lpunetwork.edu.ph" target="_blank" class="nav-link px-2" title="Email">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-envelope-fill" viewBox="0 0 16 16">
+                <path d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414.05 3.555ZM0 4.697v7.104l5.803-3.558L0 4.697ZM6.761 8.83l-6.57 4.027A2 2 0 0 0 2 14h12a2 2 0 0 0 1.808-1.144l-6.57-4.027L8 9.586l-1.239-.757Zm3.436-.586L16 11.801V4.697l-5.803 3.546Z"/>
+              </svg>
+            </a>
+              <!-- ORCID -->
+            <a href="https://orcid.org/0009-0008-4716-7429" target="_blank" class="nav-link px-2" title="ORCID" rel="noopener">
+              <img src="./assets/icon/orcid_icon.png" alt="ORCID" width="24" height="24" class="orcid-icon">
+            </a>            <!-- Dark/Light Mode Toggle -->
+            <a href="#" class="nav-link px-2">
+              <button id="theme-toggle" class="btn btn-link p-0" title="Toggle dark/light mode">
+                <svg id="moon-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-moon-fill" viewBox="0 0 16 16">
+                  <path d="M6 .278a.768.768 0 0 1 .08.858 7.208 7.208 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277.527 0 1.04-.055 1.533-.16a.787.787 0 0 1 .81.316.733.733 0 0 1-.031.893A8.349 8.349 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.752.752 0 0 1 6 .278z"/>
+                </svg>
+                <svg id="sun-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-brightness-high-fill" viewBox="0 0 16 16">
+                  <path d="M12 8a4 4 0 1 1-8 0 4 4 0 0 1 8 0zM8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0zm0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13zm8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5zM3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8zm10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0zm-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zm9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707zM4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708z"/>
+                </svg>
+              </button>
+            </a>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </div>
+  <!-- Spacer to prevent content from hiding behind fixed navbar -->
+  <div style="height: 80px;"></div>
+
+  <h2 id="chart-title" style="display: none;"></h2>
+  <!-- Form to add membership functions -->  <div id="function-form" class="card">
+    <h3 class="card-header bg-primary text-white" style="cursor: pointer;" onclick="toggleFormBody()">
+      Toolbar <i class="fas fa-chevron-up" id="fold-icon" style="padding-left: 650px;"></i>
+    </h3><div class="card-body" id="form-body">
+      <div class="row">
+        <!-- Left Column -->
+        <div class="col-md-6 pe-md-3">
+          <h5>Graph Label</h5>    
+          <div class="form-floating mb-3">
+            <input type="text" id="title-input" class="form-control" placeholder="Chart Title" value="">
+            <label for="title-input">Chart Title</label>
+          </div>
+          
+          <div class="form-floating mb-3">
+            <input type="text" id="x-axis-label" class="form-control" placeholder="X-Axis Label" value="">
+            <label for="x-axis-label">X-Axis Label</label>
+          </div>
+          
+          <div class="form-floating mb-3">
+            <input type="text" id="y-axis-label" class="form-control" placeholder="Y-Axis Label" value="">
+            <label for="y-axis-label">Y-Axis Label</label>
+          </div>
+            <div class="d-flex gap-2 mb-3">
+            <button class="btn btn-primary flex-grow-1" onclick="updateChartLabels()">Update Labels</button>
+            <button class="btn btn-danger text-white" onclick="clearLabels()">Clear</button>
+          </div>
+          <hr>
+          <h5 class="mt-3">Add Membership Function</h5>
+          <div class="input-group mb-3">
+            <span class="input-group-text">Type</span>
+            <select id="type" class="form-select" onchange="updateFieldsOrder()" title="Select the type of membership function">
+              <option value="triangle">Triangle</option>
+              <option value="left">Left-Shoulder</option>
+              <option value="right">Right-Shoulder</option>
+            </select>
+          </div>
+          
+          <div class="form-floating mb-3">
+            <input type="text" id="label" class="form-control" placeholder="Function Name" required>
+            <label for="label">Function Name</label>
+          </div>
+          
+          <div class="row">
+            <div class="col-4">
+              <div class="form-floating mb-3">
+                <input type="number" id="a" class="form-control" placeholder="a (start)" required>
+                <label for="a">a (start)</label>
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="form-floating mb-3">
+                <input type="number" id="b" class="form-control" placeholder="b (peak)" required>
+                <label for="b">b (peak)</label>
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="form-floating mb-3">
+                <input type="number" id="c" class="form-control" placeholder="c (end)" required>
+                <label for="c">c (end)</label>
+              </div>
+            </div>
+          </div>
+            <div class="d-flex gap-2 mb-3">
+            <button class="btn btn-success flex-grow-1" onclick="addTriFunction()">Add Function</button>
+            <button class="btn btn-danger text-white" onclick="clearFunctionForm()">Clear</button>
+            <button class="btn btn-primary flex-grow-1" onclick="downloadChart()">Download JPEG</button>
+          </div>
+        </div>
+        
+        <!-- Right Column -->
+        <div class="col-md-6 ps-md-3 pt-3 pt-md-0">
+          <!-- Custom Background Image Section -->
+          <h5>Custom Background Image</h5>
+          <div class="form-floating mb-2">
+            <input type="text" id="image-url" class="form-control" placeholder="Image URL">
+            <label for="image-url">Image URL</label>
+          </div>
+          <div class="mb-2">
+            <label for="image-upload" class="form-label">Or upload image:</label>
+            <input type="file" id="image-upload" class="form-control" accept="image/*">
+          </div>
+          <div class="mb-2">
+            <label for="image-opacity" class="form-label">Background Opacity: <span id="opacity-value">0.3</span></label>
+            <input type="range" class="form-range" id="image-opacity" min="0.1" max="1" step="0.1" value="0.3" 
+              oninput="document.getElementById('opacity-value').textContent = this.value"
+              onmousedown="event.stopPropagation()">
+          </div>          <div class="d-flex gap-2 mb-3">
+            <button class="btn btn-secondary flex-grow-1" onclick="previewBackgroundImage()">Preview Background</button>
+            <button class="btn btn-danger text-white" onclick="clearBackgroundImage()">Clear</button>
+          </div><hr>
+          
+          <div class="function-list" id="function-list">
+            <!-- Function items will be added here -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bookmark button to show the form -->
+  <div id="show-form-bookmark" onclick="showForm()">&#8594;</div>
+
+  <!-- Chart container -->
+  <div id="chart-container">
+    <canvas id="fuzzyChart" width="800" height="400"></canvas>
+  </div>
+  
+  <!-- Toast container -->
+  <div class="toast-container" id="toast-container"></div>
+  <script>
+    // Function to update fields order based on selected type
+    function updateFieldsOrder() {
+      const type = document.getElementById('type').value;
+      const aLabel = document.querySelector('label[for="a"]');
+      const cLabel = document.querySelector('label[for="c"]');
+      
+      if (type === 'right') {
+        // For right shoulder, reverse a and c labels
+        aLabel.textContent = 'c (end)';
+        cLabel.textContent = 'a (start)';
+      } else {
+        // For triangle and left shoulder, use standard order
+        aLabel.textContent = 'a (start)';
+        cLabel.textContent = 'c (end)';
+      }
+    }
+  
+    // Toast functions
+    function showToast(message, type = 'info') {
+      const toastId = 'toast-' + Date.now();
+      const toastContainer = document.getElementById('toast-container');
+      
+      // Set toast type styles
+      let typeClass = 'bg-info-light';
+      let iconClass = 'text-info';
+      let title = 'Information';
+      
+      if (type === 'success') {
+        typeClass = 'bg-success-light';
+        iconClass = 'text-success';
+        title = 'Success';
+      } else if (type === 'error') {
+        typeClass = 'bg-danger-light';
+        iconClass = 'text-danger';
+        title = 'Error';
+      }
+        // Create toast HTML
+      const toastHTML = `
+        <div class="toast ${typeClass} show" role="alert" aria-live="assertive" aria-atomic="true" id="${toastId}">
+          <div class="toast-header">
+            <strong class="me-auto ${iconClass}">${title}</strong>
+            <button type="button" class="btn-close" onclick="closeToast('${toastId}')" aria-label="Close"></button>
+          </div>
+          <div class="toast-body">
+            ${message}
+          </div>
+        </div>
+      `;
+      
+      // Add toast to container
+      toastContainer.insertAdjacentHTML('beforeend', toastHTML);
+      
+      // Auto close after 5 seconds
+      setTimeout(() => closeToast(toastId), 5000);
+      
+      return toastId;
+    }
+    
+    function closeToast(toastId) {
+      const toast = document.getElementById(toastId);
+      if (toast) {
+        toast.classList.remove('show');
+        // Remove from DOM after fade animation
+        setTimeout(() => toast.remove(), 500);
+      }
+    }
+      const ctx = document.getElementById('fuzzyChart').getContext('2d');
+    
+    // Set default chart colors based on current theme
+    function getChartColors() {
+      const isDarkMode = document.body.classList.contains('dark-mode');
+      return {
+        backgroundColor: isDarkMode ? '#ffffff' : '#000000',
+        gridColor: isDarkMode ? '#cccccc' : '#666666',
+        fontColor: isDarkMode ? '#333333' : '#ffffff',
+        borderColor: isDarkMode ? '#888888' : '#bbbbbb'
+      };
+    }
+    
+    let chartColors = getChartColors();
+    const chart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: Array.from({ length: 201 }, (_, i) => i - 50), // x = -50 to 150
+        datasets: []
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: true,
+        aspectRatio: 1.5,
+        animation: false,
+        scales: {
+          x: {
+            min: 0,
+            max: 10,
+            title: {
+              display: true,
+              text: 'Input Value (x)',
+              color: chartColors.fontColor,
+              font: {
+                size: 14
+              }
+            },
+            grid: {
+              color: chartColors.gridColor
+            },
+            ticks: {
+              color: chartColors.fontColor,
+              font: {
+                size: 12
+              }
+            }
+          },
+          y: {
+            min: 0,
+            max: 1,
+            title: {
+              display: true,
+              text: 'Degree of Membership',
+              color: chartColors.fontColor,
+              font: {
+                size: 14
+              }
+            },
+            grid: {
+              color: chartColors.gridColor
+            },
+            ticks: {
+              color: chartColors.fontColor,
+              font: {
+                size: 12
+              }
+            }
+          }
+        },
+        plugins: {
+          legend: {
+            position: 'right',
+            labels: {
+              color: chartColors.fontColor,
+              font: {
+                size: 12
+              }
+            }
+          }
+        }
+      }
+    });
+
+    let colorIndex = 0;
+    const colors = ['red', 'blue', 'green', 'orange', 'purple', 'teal', 'maroon'];
+
+    // Triangular membership function calculation
+    function triangularMembership(x, a, b, c, type) {
+      if (type === "left") {
+        if (x <= b) return 1;
+        else if (x > b && x < c) return (c - x) / (c - b);
+        else return 0;
+      }
+      if (type === "right") {
+        if (x >= a) return 1;
+        else if (x < a && x > b) return (x - b) / (a - b);
+        else return 0;
+      }
+      if (x <= a || x >= c) return 0;
+      else if (x === b) return 1;
+      else if (x < b) return (x - a) / (b - a);
+      else return (c - x) / (c - b);
+    }
+
+    // Close form and show bookmark
+    function closeForm() {
+      const form = document.getElementById('function-form');
+      form.style.display = 'none';
+      const bookmark = document.getElementById('show-form-bookmark');
+      bookmark.style.display = 'block';
+    }
+
+    // Show form from bookmark
+    function showForm() {
+      const form = document.getElementById('function-form');
+      form.style.display = 'block';
+      const bookmark = document.getElementById('show-form-bookmark');
+      bookmark.style.display = 'none';
+    }    // Add new function
+    function addTriFunction() {
+      // Form validation
+      const form = document.createElement('form');
+      form.classList.add('needs-validation');
+      form.noValidate = true;
+      
+      const label = document.getElementById('label');
+      const a = document.getElementById('a');
+      const b = document.getElementById('b');
+      const c = document.getElementById('c');
+      
+      // Validate required fields
+      let isValid = true;
+      
+      if (!label.value.trim()) {
+        showToast("Function Name is required", "error");
+        label.classList.add('is-invalid');
+        isValid = false;
+      } else {
+        label.classList.remove('is-invalid');
+      }
+      
+      if (!a.value) {
+        showToast("'a' value is required", "error");
+        a.classList.add('is-invalid');
+        isValid = false;
+      } else {
+        a.classList.remove('is-invalid');
+      }
+      
+      if (!b.value) {
+        showToast("'b' value is required", "error");
+        b.classList.add('is-invalid');
+        isValid = false;
+      } else {
+        b.classList.remove('is-invalid');
+      }
+      
+      if (!c.value) {
+        showToast("'c' value is required", "error");
+        c.classList.add('is-invalid');
+        isValid = false;
+      } else {
+        c.classList.remove('is-invalid');
+      }
+      
+      if (!isValid) return;
+      
+      // If all validations pass, continue with the function...
+      const labelValue = label.value;
+      let aValue = parseFloat(a.value);
+      let bValue = parseFloat(b.value);
+      let cValue = parseFloat(c.value);
+      const type = document.getElementById('type').value;
+      
+      // For right-shoulder, swap a and c to match the displayed labels
+      if (type === 'right') {
+        const temp = aValue;
+        aValue = cValue;  // Use original values, just swap positions
+        cValue = temp;
+        
+        aValue -=10;
+        bValue -=10;
+        cValue -=10;
+      }
+      
+      if (type === 'triangle' && !(aValue < bValue && bValue < cValue)) {
+        showToast("For triangle: a < b < c", "error");
+        return;
+      }
+      
+      console.log(aValue, bValue, cValue);
+      const xValues = chart.data.labels;
+      const data = xValues.map(x => triangularMembership(x, aValue, bValue, cValue, type));
+
+      // Add the function to the chart
+      const datasetIndex = chart.data.datasets.length;
+      const color = colors[colorIndex++ % colors.length];
+      
+      chart.data.datasets.push({
+        label: labelValue,
+        data: data,
+        borderColor: color,
+        fill: false,
+        tension: 0
+      });      // Auto-adjust the x-axis range based on the function parameters
+      const functionMin = Math.min(aValue, bValue, cValue);
+      const functionMax = Math.max(aValue, bValue, cValue);
+      
+      // Add some padding to the range (10% on each side)
+      const padding = (functionMax - functionMin) * 0.1;
+      const newMin = Math.max(0, functionMin - padding); // Don't go below 0
+      const newMax = functionMax + padding;
+      
+      // Update chart x-axis if the new function extends beyond current range
+      if (newMin < chart.options.scales.x.min) {
+        chart.options.scales.x.min = Math.floor(newMin);
+      }
+      if (newMax > chart.options.scales.x.max) {
+        chart.options.scales.x.max = Math.ceil(newMax);
+      }
+      
+      chart.update();
+      
+      // Add function to the list for easy deletion
+      addFunctionToList(labelValue, datasetIndex);
+      
+      clearForm(); // Clear form after adding function
+      
+      // Save to localStorage whenever a new function is added
+      saveToLocalStorage();
+    }// Clear form inputs after adding function
+    function clearForm() {
+      document.getElementById('label').value = '';
+      document.getElementById('a').value = '';
+      document.getElementById('b').value = '';
+      document.getElementById('c').value = '';
+    }    // Download chart as JPEG
+    function downloadChart() {
+      // Make sure the chart has the current title before download
+      const title = document.getElementById('chart-title').textContent;
+      chart.options.plugins.title = {
+        display: true,
+        text: title,
+        font: {
+          size: 18,
+          weight: 'bold'
+        },
+        padding: {
+          top: 10,
+          bottom: 20
+        }
+      };
+      chart.update();
+      
+      const canvas = document.getElementById('fuzzyChart');
+      
+      // Create a temporary canvas with white background
+      const tempCanvas = document.createElement('canvas');
+      const tempCtx = tempCanvas.getContext('2d');
+      tempCanvas.width = canvas.width;
+      tempCanvas.height = canvas.height;
+      
+      // Fill with white background
+      tempCtx.fillStyle = "white";
+      tempCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
+        // Add custom background image if one is set
+      if (backgroundImage) {
+        tempCtx.globalAlpha = backgroundImageOpacity;
+        tempCtx.drawImage(backgroundImage, 0, 0, tempCanvas.width, tempCanvas.height);
+        tempCtx.globalAlpha = 1.0;
+      }
+      
+      // Draw the chart on top of the background
+      tempCtx.drawImage(canvas, 0, 0);
+      
+      // Create download link from the temp canvas
+      const link = document.createElement('a');
+      link.download = 'fuzzy_membership_functions.jpeg';
+      link.href = tempCanvas.toDataURL('image/jpeg', 1.0);
+      link.click();
+    }
+      // Delete function from chart and list
+    function deleteFunction(index) {
+      // Remove from chart
+      chart.data.datasets.splice(index, 1);
+      
+      // Update chart
+      chart.update();
+      
+      // Rebuild the function list to reflect the updated indices
+      rebuildFunctionList();
+      
+      // Save to localStorage when a function is deleted
+      saveToLocalStorage();
+    }    // Update chart title from the input field
+    function updateTitleFromInput() {
+      const newTitle = document.getElementById('title-input').value;
+      
+      // Update the H2 title on the page
+      document.getElementById('chart-title').textContent = newTitle;
+      
+      // Update title in the downloaded image
+      chart.options.plugins.title = {
+        display: true,
+        text: newTitle,
+        font: {
+          size: 18
+        }
+      };
+      chart.update();
+    }
+    
+    // Update axis labels from input fields
+    function updateChartLabels() {
+      const newTitle = document.getElementById('title-input').value;
+      const xAxisLabel = document.getElementById('x-axis-label').value;
+      const yAxisLabel = document.getElementById('y-axis-label').value;
+      
+      // Update the H2 title on the page
+      document.getElementById('chart-title').textContent = newTitle;
+      
+      // Update title in chart
+      chart.options.plugins.title = {
+        display: true,
+        text: newTitle,
+        font: {
+          size: 18,
+          weight: 'bold'
+        }
+      };
+      
+      // Update x-axis label
+      chart.options.scales.x.title.text = xAxisLabel;
+      
+      // Update y-axis label
+      chart.options.scales.y.title.text = yAxisLabel;
+      
+      chart.update();
+    }
+    
+    // Rebuild the function list
+    function rebuildFunctionList() {
+      const functionList = document.getElementById('function-list');
+      functionList.innerHTML = ''; // Clear the list
+      
+      // Rebuild list based on current datasets
+      chart.data.datasets.forEach((dataset, index) => {
+        addFunctionToList(dataset.label, index);
+      });
+    }
+      // Add function to the list in the form
+    function addFunctionToList(label, index) {
+      const functionList = document.getElementById('function-list');
+      const functionItem = document.createElement('div');
+      functionItem.className = 'function-item';
+      
+      // Get the current color of this function
+      const currentColor = chart.data.datasets[index].borderColor;
+      
+      functionItem.innerHTML = `
+        <span>${label}</span>
+        <div class="function-controls">
+          <input type="color" value="${currentColor}" title="Change color" 
+            onchange="changeLineColor(${index}, this.value)" class="color-picker" />
+          <button onclick="deleteFunction(${index})">Delete</button>
+        </div>
+      `;
+      functionList.appendChild(functionItem);
+    }
+    
+    // Change the color of a line
+    function changeLineColor(index, newColor) {
+      // Update the color in the chart
+      chart.data.datasets[index].borderColor = newColor;
+      chart.update();
+      
+      showToast(`Color updated for "${chart.data.datasets[index].label}"`, "success");
+    }
+
+    // Make the form draggable
+    let isDragging = false;
+    let offsetX, offsetY;
+
+    const form = document.getElementById('function-form');
+    
+    form.addEventListener('mousedown', (e) => {
+      isDragging = true;
+      offsetX = e.clientX - form.getBoundingClientRect().left;
+      offsetY = e.clientY - form.getBoundingClientRect().top;
+    });
+
+    document.addEventListener('mousemove', (e) => {
+      if (isDragging) {
+        form.style.left = e.clientX - offsetX + 'px';
+        form.style.top = e.clientY - offsetY + 'px';
+      }
+    });
+
+    document.addEventListener('mouseup', () => {
+      isDragging = false;
+    });    // Variables for axis scaling
+    let yAxisMin = 0;
+    let yAxisMax = 1;
+    let xAxisMin = -50;
+    let xAxisMax = 150;
+    const ZOOM_INTENSITY = 0.1; // How much each scroll changes the scale
+    let zoomToastId = null; // Track current zoom toast ID
+    
+    // Add wheel event listener to the chart container for zoom functionality
+    document.getElementById('chart-container').addEventListener('wheel', function(e) {
+      // Prevent default scrolling behavior
+      e.preventDefault();
+      
+      // Determine scaling direction based on scroll direction
+      const scaleFactor = e.deltaY > 0 ? 1 + ZOOM_INTENSITY : 1 - ZOOM_INTENSITY;
+      
+      // Determine if we're zooming X or Y axis (Ctrl key for X-axis)
+      const isXAxisZoom = e.ctrlKey;
+      
+      if (isXAxisZoom) {
+        // X-axis zoom (with Ctrl key pressed)
+        const range = xAxisMax - xAxisMin;
+        const mid = (xAxisMax + xAxisMin) / 2;
+        const halfNewRange = (range * scaleFactor) / 2;
+        
+        // Ensure we don't zoom in too much or out too much
+        if (scaleFactor > 1) {
+          // Zooming out (increasing range)
+          if (xAxisMax - xAxisMin < 500) { // Limit maximum range
+            xAxisMin = mid - halfNewRange;
+            xAxisMax = mid + halfNewRange;
+          }
+        } else {
+          // Zooming in (decreasing range)
+          if (xAxisMax - xAxisMin > 10) { // Minimum allowed range
+            xAxisMin = mid - halfNewRange;
+            xAxisMax = mid + halfNewRange;
+          }
+        }
+        
+        // Update chart x-axis scale
+        chart.options.scales.x.min = Math.round(xAxisMin);
+        chart.options.scales.x.max = Math.round(xAxisMax);
+        chart.update();
+        
+        // Update or create toast notification
+        updateZoomToast(`X-axis scale: ${Math.round(xAxisMin)} to ${Math.round(xAxisMax)}`, 'info');      } else {
+        // Y-axis zoom (default behavior)
+        const range = yAxisMax - yAxisMin;
+        const mid = (yAxisMax + yAxisMin) / 2;
+        const halfNewRange = (range * scaleFactor) / 2;
+        
+        // Ensure we don't zoom in too much or out too much
+        if (scaleFactor > 1) {
+          // Zooming out (increasing range)
+          if (yAxisMax - yAxisMin < 5) { // Limit maximum range
+            yAxisMin = Math.max(0, mid - halfNewRange); // Don't go below 0
+            yAxisMax = 1.0; // Keep max at 1.0 as default for membership functions
+          }
+        } else {
+          // Zooming in (decreasing range)
+          if (yAxisMax - yAxisMin > 0.05) { // Minimum allowed range
+            yAxisMin = Math.max(0, mid - halfNewRange); // Don't go below 0
+            yAxisMax = Math.min(1.0, mid + halfNewRange); // Don't exceed 1.0
+          }
+        }
+        
+        // Update chart y-axis scale
+        chart.options.scales.y.min = yAxisMin;
+        chart.options.scales.y.max = yAxisMax;
+        chart.update();
+        
+        // Update or create toast notification
+        updateZoomToast(`Y-axis scale: ${yAxisMin.toFixed(2)} to ${yAxisMax.toFixed(2)}`, 'info');
+      }
+    }, { passive: false });
+    
+    // Variables for background image
+    let backgroundImage = null;
+    let backgroundImageOpacity = 0.3;
+    
+    // Toggle form body (expand/collapse)
+    function toggleFormBody() {
+      const formBody = document.getElementById('form-body');
+      const foldIcon = document.getElementById('fold-icon');
+      
+      if (formBody.style.display === 'none') {
+        // Expand
+        formBody.style.display = 'block';
+        foldIcon.classList.remove('fa-chevron-down');
+        foldIcon.classList.add('fa-chevron-up');
+      } else {
+        // Collapse
+        formBody.style.display = 'none';
+        foldIcon.classList.remove('fa-chevron-up');
+        foldIcon.classList.add('fa-chevron-down');
+      }
+    }
+    
+    // Preview background image
+    function previewBackgroundImage() {
+      const imageUrl = document.getElementById('image-url').value;
+      const imageUpload = document.getElementById('image-upload').files[0];
+      const opacity = document.getElementById('image-opacity').value;
+      
+      if (!imageUrl && !imageUpload) {
+        showToast("Please provide an image URL or upload an image file", "error");
+        return;
+      }
+      
+      backgroundImageOpacity = parseFloat(opacity);
+      
+      if (imageUpload) {
+        // Handle uploaded image
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          loadBackgroundImage(e.target.result);
+        };
+        reader.readAsDataURL(imageUpload);
+      } else if (imageUrl) {
+        // Handle image URL
+        loadBackgroundImage(imageUrl);
+      }
+    }
+    
+    // Load background image
+    function loadBackgroundImage(src) {
+      backgroundImage = new Image();
+      backgroundImage.crossOrigin = "Anonymous"; // Allow cross-origin images
+      
+      backgroundImage.onload = function() {
+        showToast("Background image loaded successfully!", "success");
+        applyBackgroundToChart();
+      };
+      
+      backgroundImage.onerror = function() {
+        showToast("Failed to load image. Check the URL or try a different image.", "error");
+        backgroundImage = null;
+      };
+      
+      backgroundImage.src = src;
+    }    // Apply background image to chart
+    function applyBackgroundToChart() {
+      if (!backgroundImage) return;
+      
+      // First, unregister any existing bgImage plugin
+      Chart.unregister({
+        id: 'bgImage'
+      });
+      
+      // Create and register a new plugin to render the background image
+      const bgImagePlugin = {
+        id: 'bgImage',
+        beforeDraw: (chart) => {
+          const ctx = chart.ctx;
+          // Use the full canvas dimensions
+          const width = chart.width;
+          const height = chart.height;
+          
+          // Save the current state to restore later
+          ctx.save();
+          
+          // Draw the background image to fit the entire canvas
+          ctx.globalAlpha = backgroundImageOpacity;
+          ctx.drawImage(backgroundImage, 0, 0, width, height);
+          
+          // Restore the context
+          ctx.globalAlpha = 1;
+          ctx.restore();
+        }
+      };
+      
+      // Register the plugin with Chart.js
+      Chart.register(bgImagePlugin);
+      
+      // Apply a custom background color to chart container
+      const chartContainer = document.getElementById('chart-container');
+      
+      // Update the chart to show the background
+      chart.update();
+      
+      showToast("Background image applied to chart", "success");
+    }
+    
+    // Function to update zoom toast (creates new one if needed, updates existing one otherwise)
+    function updateZoomToast(message, type = 'info') {
+      // If we have an existing toast, update it
+      if (zoomToastId) {
+        const toastBody = document.querySelector(`#${zoomToastId} .toast-body`);
+        if (toastBody) {
+          toastBody.textContent = message;
+          return;
+        }
+      }
+      
+      // Otherwise create a new one
+      zoomToastId = showToast(message, type);
+      
+      // Auto clear toast ID after it's removed
+      setTimeout(() => {
+        zoomToastId = null;
+      }, 5500); // 5s display + 0.5s animation
+    }
+      // Function to update zoom toast (creates new one if needed, updates existing one otherwise)
+    function updateZoomToast(message, type = 'info') {
+      // If we have an existing toast, update it
+      if (zoomToastId) {
+        const toastBody = document.querySelector(`#${zoomToastId} .toast-body`);
+        if (toastBody) {
+          toastBody.textContent = message;
+          return;
+        }
+      }
+      
+      // Otherwise create a new one
+      zoomToastId = showToast(message, type);
+      
+      // Auto clear toast ID after it's removed
+      setTimeout(() => {
+        zoomToastId = null;
+      }, 5500); // 5s display + 0.5s animation
+    }
+    
+    // Save and load functions using localStorage
+    // Save all chart data and preferences to localStorage
+    function saveToLocalStorage() {
+      try {
+        // Save chart dataset (membership functions)
+        const datasets = chart.data.datasets.map(dataset => ({
+          label: dataset.label,
+          borderColor: dataset.borderColor,
+          data: dataset.data,
+          fill: dataset.fill,
+          tension: dataset.tension
+        }));
+        
+        localStorage.setItem('fuzzymf_datasets', JSON.stringify(datasets));
+        
+        // Save chart axis ranges and settings
+        const chartSettings = {
+          xMin: chart.options.scales.x.min,
+          xMax: chart.options.scales.x.max,
+          yMin: chart.options.scales.y.min,
+          yMax: chart.options.scales.y.max,
+          xAxisLabel: chart.options.scales.x.title.text,
+          yAxisLabel: chart.options.scales.y.title.text,
+          title: document.getElementById('chart-title').textContent,
+        };
+        localStorage.setItem('fuzzymf_chartSettings', JSON.stringify(chartSettings));
+        
+        // Save form position
+        const formPosition = {
+          left: form.style.left,
+          top: form.style.top,
+          folded: document.getElementById('form-body').style.display === 'none'
+        };
+        localStorage.setItem('fuzzymf_formPosition', JSON.stringify(formPosition));
+        
+        // Save form inputs
+        const formInputs = {
+          title: document.getElementById('title-input').value,
+          xAxisLabel: document.getElementById('x-axis-label').value,
+          yAxisLabel: document.getElementById('y-axis-label').value,
+          imageURL: document.getElementById('image-url').value,
+          imageOpacity: document.getElementById('image-opacity').value
+        };
+        localStorage.setItem('fuzzymf_formInputs', JSON.stringify(formInputs));
+        
+      } catch (error) {
+        console.error('Error saving to localStorage:', error);
+        showToast('Failed to save your work automatically', 'error');
+      }
+    }
+    
+    // Load data from localStorage
+    function loadFromLocalStorage() {
+      try {
+        // Load chart datasets (membership functions)
+        const savedDatasets = localStorage.getItem('fuzzymf_datasets');
+        if (savedDatasets) {
+          const datasets = JSON.parse(savedDatasets);
+          chart.data.datasets = datasets;
+          
+          // Update function list based on loaded datasets
+          rebuildFunctionList();
+        }
+        
+        // Load chart settings
+        const savedChartSettings = localStorage.getItem('fuzzymf_chartSettings');
+        if (savedChartSettings) {
+          const chartSettings = JSON.parse(savedChartSettings);
+          
+          // Update chart axis ranges
+          chart.options.scales.x.min = chartSettings.xMin;
+          chart.options.scales.x.max = chartSettings.xMax;
+          chart.options.scales.y.min = chartSettings.yMin;
+          chart.options.scales.y.max = chartSettings.yMax;
+          
+          // Update global variables to match loaded values
+          xAxisMin = chartSettings.xMin;
+          xAxisMax = chartSettings.xMax;
+          yAxisMin = chartSettings.yMin;
+          yAxisMax = chartSettings.yMax;
+          
+          // Update axis labels
+          chart.options.scales.x.title.text = chartSettings.xAxisLabel;
+          chart.options.scales.y.title.text = chartSettings.yAxisLabel;
+          
+          // Update title
+          const chartTitle = document.getElementById('chart-title');
+          chartTitle.textContent = chartSettings.title;
+          chartTitle.style.display = chartSettings.title ? 'block' : 'none';
+          
+          // Update chart title plugin
+          chart.options.plugins.title = {
+            display: !!chartSettings.title,
+            text: chartSettings.title,
+            font: { size: 18, weight: 'bold' },
+            padding: { top: 10, bottom: 20 }
+          };
+        }
+        
+        // Load form position
+        const savedFormPosition = localStorage.getItem('fuzzymf_formPosition');
+        if (savedFormPosition) {
+          const formPosition = JSON.parse(savedFormPosition);
+          if (formPosition.left) form.style.left = formPosition.left;
+          if (formPosition.top) form.style.top = formPosition.top;
+          
+          // Handle folded state
+          const formBody = document.getElementById('form-body');
+          const foldIcon = document.getElementById('fold-icon');
+          
+          if (formPosition.folded) {
+            formBody.style.display = 'none';
+            foldIcon.classList.remove('fa-chevron-up');
+            foldIcon.classList.add('fa-chevron-down');
+          }
+        }
+        
+        // Load form inputs
+        const savedFormInputs = localStorage.getItem('fuzzymf_formInputs');
+        if (savedFormInputs) {
+          const formInputs = JSON.parse(savedFormInputs);
+          document.getElementById('title-input').value = formInputs.title || '';
+          document.getElementById('x-axis-label').value = formInputs.xAxisLabel || '';
+          document.getElementById('y-axis-label').value = formInputs.yAxisLabel || '';
+          document.getElementById('image-url').value = formInputs.imageURL || '';
+          
+          if (formInputs.imageOpacity) {
+            const opacitySlider = document.getElementById('image-opacity');
+            opacitySlider.value = formInputs.imageOpacity;
+            document.getElementById('opacity-value').textContent = formInputs.imageOpacity;
+          }
+          
+          // Load background image if URL exists
+          if (formInputs.imageURL) {
+            backgroundImageOpacity = parseFloat(formInputs.imageOpacity || 0.3);
+            loadBackgroundImage(formInputs.imageURL);
+          }
+        }
+        
+        // Update the chart with all restored data
+        chart.update();
+        
+        if (chart.data.datasets.length > 0) {
+          showToast('Your previous work has been restored', 'info');
+        }
+      } catch (error) {
+        console.error('Error loading from localStorage:', error);
+        showToast('Failed to restore your previous work', 'error');
+      }
+    }
+    
+    // Auto-save timer (save every 30 seconds)
+    setInterval(saveToLocalStorage, 3000);
+    
+    // Update chart colors based on current theme
+    function updateChartColors() {
+      const chartColors = getChartColors();
+      
+      // Update chart scales and font colors
+      chart.options.scales.x.grid.color = chartColors.gridColor;
+      chart.options.scales.y.grid.color = chartColors.gridColor;
+      chart.options.scales.x.ticks.color = chartColors.fontColor;
+      chart.options.scales.y.ticks.color = chartColors.fontColor;
+      chart.options.scales.x.title.color = chartColors.fontColor;
+      chart.options.scales.y.title.color = chartColors.fontColor;
+      
+      // Update legend colors
+      chart.options.plugins.legend.labels.color = chartColors.fontColor;
+      
+      // Update title color if it exists
+      if (chart.options.plugins.title) {
+        chart.options.plugins.title.color = chartColors.fontColor;
+      }
+      
+      // Apply changes
+      chart.update();
+    }
+
+    // Functions to clear different sections of the form
+    
+    // Clear the graph labels
+    function clearLabels() {
+      document.getElementById('title-input').value = '';
+      document.getElementById('x-axis-label').value = '';
+      document.getElementById('y-axis-label').value = '';
+      
+      // Update chart with empty labels
+      document.getElementById('chart-title').textContent = '';
+      document.getElementById('chart-title').style.display = 'none';
+      
+      chart.options.plugins.title = {
+        display: false,
+        text: ''
+      };
+      
+      chart.options.scales.x.title.text = 'Input Value (x)';
+      chart.options.scales.y.title.text = 'Degree of Membership';
+      
+      chart.update();
+      
+      showToast('Graph labels cleared', 'info');
+      
+      // Save the changes to localStorage
+      saveToLocalStorage();
+    }
+    
+    // Clear the membership function form
+    function clearFunctionForm() {
+      document.getElementById('label').value = '';
+      document.getElementById('a').value = '';
+      document.getElementById('b').value = '';
+      document.getElementById('c').value = '';
+      document.getElementById('type').value = 'triangle';
+      
+      // Reset the field labels to match triangle type
+      const aLabel = document.querySelector('label[for="a"]');
+      const cLabel = document.querySelector('label[for="c"]');
+      aLabel.textContent = 'a (start)';
+      cLabel.textContent = 'c (end)';
+      
+      showToast('Function form cleared', 'info');
+    }
+    
+    // Clear background image
+    function clearBackgroundImage() {
+      document.getElementById('image-url').value = '';
+      document.getElementById('image-upload').value = '';
+      document.getElementById('opacity-value').textContent = '0.3';
+      document.getElementById('image-opacity').value = 0.3;
+      
+      // Remove background image from chart
+      backgroundImage = null;
+      backgroundImageOpacity = 0.3;
+      
+      // Unregister any existing bgImage plugin
+      Chart.unregister({
+        id: 'bgImage'
+      });
+      
+      // Update chart without background
+      chart.update();
+      
+      showToast('Background image cleared', 'info');
+      
+      // Save the changes to localStorage
+      saveToLocalStorage();
+    }
+  </script>  <!-- Footer -->  <footer class="footer mt-5 py-3 bg-dark w-100 position-relative" style="left: 0; right: 0; margin: 0; max-width: 100%;">
+    <br>
+    <div class="container-fluid px-0">
+      <div class="row g-0 justify-content-center mx-0">        <div class="col-lg-4 col-md-6 mb-3 px-4">
+          <h5><img src="./assets/icon/icon.png" alt="Connection Icon" class="footer-logo"><strong>Fuzzy Logic Membership Function Graph</strong></h5>
+          <p class="footer-text">Create and visualize fuzzy logic membership functions with ease.</p>
+        </div>        <div class="col-lg-2 col-md-3 mb-3 px-4">
+          <h5>Links</h5>
+          <ul class="list-unstyled">
+            <li>
+              <a href="https://github.com" target="_blank" class="footer-link" rel="noopener">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-github" viewBox="0 0 16 16" style="margin-right: 5px; vertical-align: -0.125em;">
+                  <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
+                </svg>
+                GitHub
+              </a>
+            </li>            <li>
+              <a href="https://linkedin.com/in/bpmiranda" target="_blank" class="footer-link" rel="noopener">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-linkedin" viewBox="0 0 16 16" style="margin-right: 5px; vertical-align: -0.125em;">
+                  <path d="M0 1.146C0 .513.526 0 1.175 0h13.65C15.474 0 16 .513 16 1.146v13.708c0 .633-.526 1.146-1.175 1.146H1.175C.526 16 0 15.487 0 14.854V1.146zm4.943 12.248V6.169H2.542v7.225h2.401zm-1.2-8.212c.837 0 1.358-.554 1.358-1.248-.015-.709-.52-1.248-1.342-1.248-.822 0-1.359.54-1.359 1.248 0 .694.521 1.248 1.327 1.248h.016zm4.908 8.212V9.359c0-.216.016-.432.08-.586.173-.431.568-.878 1.232-.878.869 0 1.216.662 1.216 1.634v3.865h2.401V9.25c0-2.22-1.184-3.252-2.764-3.252-1.274 0-1.845.7-2.165 1.193v.025h-.016a5.54 5.54 0 0 1 .016-.025V6.169h-2.4c.03.678 0 7.225 0 7.225h2.4z"/>
+                </svg>
+                LinkedIn
+              </a>
+            </li>
+            <li>
+              <a href="mailto:brandon.miranda@lpunetwork.edu.ph" target="_blank" class="footer-link">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-envelope-fill" viewBox="0 0 16 16" style="margin-right: 5px; vertical-align: -0.125em;">
+                  <path d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414.05 3.555ZM0 4.697v7.104l5.803-3.558L0 4.697ZM6.761 8.83l-6.57 4.027A2 2 0 0 0 2 14h12a2 2 0 0 0 1.808-1.144l-6.57-4.027L8 9.586l-1.239-.757Zm3.436-.586L16 11.801V4.697l-5.803 3.546Z"/>
+                </svg>
+                Email
+              </a>
+            </li>            <li>
+              <a href="https://orcid.org/0009-0008-4716-7429" target="_blank" class="footer-link" rel="noopener">
+                <img src="./assets/icon/orcid_icon.png" alt="ORCID" width="16" height="16" style="margin-right: 5px; vertical-align: -0.125em;" class="footer-orcid-icon">
+                ORCID
+              </a>
+            </li>
+          </ul>
+        </div>
+        <div class="col-lg-4 col-md-3 mb-3 px-4">
+          <h5 id="about">About</h5>
+          <p class="footer-text">This tool allows you to create and visualize custom fuzzy membership functions for fuzzy logic applications.</p>
+        </div>
+      </div>
+      <hr class="mx-0">
+      <div class="row g-0 mx-0">
+        <div class="col-12 text-center">
+          <p class="footer-copyright">&copy; 2025 Fuzzy Logic Membership Function Graph. Brandon Miranda. All rights reserved.</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <!-- Bootstrap JS Bundle with Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- AOS Animation Library -->
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script>
+    // Initialize AOS
+    AOS.init({
+      duration: 800,
+      easing: 'ease-in-out',
+      once: false
+    });
+    
+    // Dark/Light Mode Toggle Functionality    document.addEventListener('DOMContentLoaded', function() {
+      const themeToggle = document.getElementById('theme-toggle');
+      const moonIcon = document.getElementById('moon-icon');
+      const sunIcon = document.getElementById('sun-icon');
+      const body = document.body;
+      const navbar = document.querySelector('.navbar');
+      
+      // Variables for scroll animation
+      let lastScrollTop = 0;
+      let scrollTimer;
+      
+      // Load saved data from localStorage
+      loadFromLocalStorage();
+      
+      // Check for saved theme preference or use system preference
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        enableDarkMode();
+      } else {
+        enableLightMode();
+      }
+        // Scroll event for navbar animation
+      window.addEventListener('scroll', function() {
+        let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        
+        // Add scrolled class for style changes
+        if (scrollTop > 10) {
+          if (!navbar.classList.contains('navbar-scrolled')) {
+            navbar.classList.add('navbar-scrolled');
+          }
+        } else {
+          navbar.classList.remove('navbar-scrolled');
+        }
+        
+        // Update last scroll position
+        lastScrollTop = scrollTop;
+      });
+      
+      // Toggle theme on button click
+      themeToggle.addEventListener('click', function() {
+        if (body.classList.contains('dark-mode')) {
+          enableLightMode();
+        } else {
+          enableDarkMode();
+        }
+      });
+        function enableDarkMode() {
+        body.classList.add('dark-mode');
+        moonIcon.style.display = 'none';
+        sunIcon.style.display = 'block';
+        localStorage.setItem('theme', 'dark');
+        updateChartColors();
+      }
+      
+      function enableLightMode() {
+        body.classList.remove('dark-mode');
+        moonIcon.style.display = 'block';
+        sunIcon.style.display = 'none';
+        localStorage.setItem('theme', 'light');
+        updateChartColors();
+      }
+      
+      // Save and load functions using localStorage
+      // Save all chart data and preferences to localStorage
+      function saveToLocalStorage() {
+        try {
+          // Save chart dataset (membership functions)
+          const datasets = chart.data.datasets.map(dataset => ({
+            label: dataset.label,
+            borderColor: dataset.borderColor,
+            data: dataset.data,
+            fill: dataset.fill,
+            tension: dataset.tension
+          }));
+          
+          localStorage.setItem('fuzzymf_datasets', JSON.stringify(datasets));
+          
+          // Save chart axis ranges and settings
+          const chartSettings = {
+            xMin: chart.options.scales.x.min,
+            xMax: chart.options.scales.x.max,
+            yMin: chart.options.scales.y.min,
+            yMax: chart.options.scales.y.max,
+            xAxisLabel: chart.options.scales.x.title.text,
+            yAxisLabel: chart.options.scales.y.title.text,
+            title: document.getElementById('chart-title').textContent,
+          };
+          localStorage.setItem('fuzzymf_chartSettings', JSON.stringify(chartSettings));
+          
+          // Save form position
+          const formPosition = {
+            left: form.style.left,
+            top: form.style.top,
+            folded: document.getElementById('form-body').style.display === 'none'
+          };
+          localStorage.setItem('fuzzymf_formPosition', JSON.stringify(formPosition));
+          
+          // Save form inputs
+          const formInputs = {
+            title: document.getElementById('title-input').value,
+            xAxisLabel: document.getElementById('x-axis-label').value,
+            yAxisLabel: document.getElementById('y-axis-label').value,
+            imageURL: document.getElementById('image-url').value,
+            imageOpacity: document.getElementById('image-opacity').value
+          };
+          localStorage.setItem('fuzzymf_formInputs', JSON.stringify(formInputs));
+          
+        } catch (error) {
+          console.error('Error saving to localStorage:', error);
+          showToast('Failed to save your work automatically', 'error');
+        }
+      }
+      
+      // Load data from localStorage
+      function loadFromLocalStorage() {
+        try {
+          // Load chart datasets (membership functions)
+          const savedDatasets = localStorage.getItem('fuzzymf_datasets');
+          if (savedDatasets) {
+            const datasets = JSON.parse(savedDatasets);
+            chart.data.datasets = datasets;
+            
+            // Update function list based on loaded datasets
+            rebuildFunctionList();
+          }
+          
+          // Load chart settings
+          const savedChartSettings = localStorage.getItem('fuzzymf_chartSettings');
+          if (savedChartSettings) {
+            const chartSettings = JSON.parse(savedChartSettings);
+            
+            // Update chart axis ranges
+            chart.options.scales.x.min = chartSettings.xMin;
+            chart.options.scales.x.max = chartSettings.xMax;
+            chart.options.scales.y.min = chartSettings.yMin;
+            chart.options.scales.y.max = chartSettings.yMax;
+            
+            // Update global variables to match loaded values
+            xAxisMin = chartSettings.xMin;
+            xAxisMax = chartSettings.xMax;
+            yAxisMin = chartSettings.yMin;
+            yAxisMax = chartSettings.yMax;
+            
+            // Update axis labels
+            chart.options.scales.x.title.text = chartSettings.xAxisLabel;
+            chart.options.scales.y.title.text = chartSettings.yAxisLabel;
+            
+            // Update title
+            const chartTitle = document.getElementById('chart-title');
+            chartTitle.textContent = chartSettings.title;
+            chartTitle.style.display = chartSettings.title ? 'block' : 'none';
+            
+            // Update chart title plugin
+            chart.options.plugins.title = {
+              display: !!chartSettings.title,
+              text: chartSettings.title,
+              font: { size: 18, weight: 'bold' },
+              padding: { top: 10, bottom: 20 }
+            };
+          }
+          
+          // Load form position
+          const savedFormPosition = localStorage.getItem('fuzzymf_formPosition');
+          if (savedFormPosition) {
+            const formPosition = JSON.parse(savedFormPosition);
+            if (formPosition.left) form.style.left = formPosition.left;
+            if (formPosition.top) form.style.top = formPosition.top;
+            
+            // Handle folded state
+            const formBody = document.getElementById('form-body');
+            const foldIcon = document.getElementById('fold-icon');
+            
+            if (formPosition.folded) {
+              formBody.style.display = 'none';
+              foldIcon.classList.remove('fa-chevron-up');
+              foldIcon.classList.add('fa-chevron-down');
+            }
+          }
+          
+          // Load form inputs
+          const savedFormInputs = localStorage.getItem('fuzzymf_formInputs');
+          if (savedFormInputs) {
+            const formInputs = JSON.parse(savedFormInputs);
+            document.getElementById('title-input').value = formInputs.title || '';
+            document.getElementById('x-axis-label').value = formInputs.xAxisLabel || '';
+            document.getElementById('y-axis-label').value = formInputs.yAxisLabel || '';
+            document.getElementById('image-url').value = formInputs.imageURL || '';
+            
+            if (formInputs.imageOpacity) {
+              const opacitySlider = document.getElementById('image-opacity');
+              opacitySlider.value = formInputs.imageOpacity;
+              document.getElementById('opacity-value').textContent = formInputs.imageOpacity;
+            }
+            
+            // Load background image if URL exists
+            if (formInputs.imageURL) {
+              backgroundImageOpacity = parseFloat(formInputs.imageOpacity || 0.3);
+              loadBackgroundImage(formInputs.imageURL);
+            }
+          }
+          
+          // Update the chart with all restored data
+          chart.update();
+          
+          if (chart.data.datasets.length > 0) {
+            showToast('Your previous work has been restored', 'info');
+          }
+        } catch (error) {
+          console.error('Error loading from localStorage:', error);
+          showToast('Failed to restore your previous work', 'error');
+        }
+      }
+      
+      // Auto-save timer (save every 30 seconds)
+      setInterval(saveToLocalStorage, 30000);
+      
+      // Update chart colors based on current theme
+      function updateChartColors() {
+        const chartColors = getChartColors();
+        
+        // Update chart scales and font colors
+        chart.options.scales.x.grid.color = chartColors.gridColor;
+        chart.options.scales.y.grid.color = chartColors.gridColor;
+        chart.options.scales.x.ticks.color = chartColors.fontColor;
+        chart.options.scales.y.ticks.color = chartColors.fontColor;
+        chart.options.scales.x.title.color = chartColors.fontColor;
+        chart.options.scales.y.title.color = chartColors.fontColor;
+        
+        // Update legend colors
+        chart.options.plugins.legend.labels.color = chartColors.fontColor;
+        
+        // Update title color if it exists
+        if (chart.options.plugins.title) {
+          chart.options.plugins.title.color = chartColors.fontColor;
+        }
+        
+        // Apply changes
+        chart.update();
+      }
+      document.getElementById("chart-title").style.display = "none";
+  </script>
+</body>
+</html>
